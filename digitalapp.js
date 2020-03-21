@@ -58,18 +58,47 @@ $("#btn_nuevo_doc_crear").click(function(){
     var ndoc = new Documento(nom);
     dashboard.agregar_documento(ndoc);
     $("#fila_nuevo_doc").hide();
-    var fila = `
+    var fila_html = `
     <tr>
         <td scope="row">${nom}</td>
         <td>
-            <button class="btn"><i class="fa fa-upload"></i></button>
+            <button class="btn upload"><i class="fa fa-upload"></i></button>
         </td>
         <td>
-            <button class="btn"><i class="fa fa-edit"></i></button>
-            <button class="btn"><i class="fa fa-minus"></i></button>
+            <button class="btn edit"><i class="fa fa-edit"></i></button>
+            <button class="btn delete"><i class="fa fa-minus"></i></button>
         </td>
     </tr>`;
+
+    var fila = $(fila_html);
+    var btn_edit = fila.find(".edit").first();
+    var btn_upload = fila.find(".upload").first();
+    var btn_delete = fila.find(".delete").first();
+
+    $(btn_edit).click(function(){
+        $(fila).hide();
+        var fila_editar_html = `
+            <tr>
+                <td scope="row"> <input type="text" value="${nom}"> </td>
+                <td>
+                </td>
+                <td>
+                    <button class="btn guardar_edit"><i class="fa fa-check"></i></button>
+                </td>
+            </tr>`;
+        var fila_edit = $(fila_editar_html);
+        $(fila).after(fila_edit);
+        var btn_guar_edit = fila_edit.find(".guardar_edit").first();
+        $(btn_guar_edit).click(function(){
+            $(fila_edit).remove();
+            $(fila).show();
+            //Editar campo nombre de la fila
+            //Editar atributo nombre del objeto de documento
+        });
+    });
+
     $("#listado").find("tbody").first().append(fila);
+
 
     //ndoc.setNombre(nom);
     /*
