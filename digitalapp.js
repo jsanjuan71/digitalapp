@@ -1,3 +1,6 @@
+var dashboard = new Dashboard();
+console.log(dashboard);
+
 var usuarios = [
     {
         "Nombre":"Julio Sanjuan",
@@ -29,7 +32,79 @@ var logout = document.getElementById("logout");
 var abrir_registro = document.getElementById("abrir_registro");
 var abrir_recuperar = document.getElementById("abrir_recuperar");
 
+$("#btn_crear").click(function(){
+    $("#fila_nuevo_doc").show();
+});
 
+$("#btn_nuevo_doc_crear").click(function(){
+    // agregar un documenton nuevo
+    
+    var nom = $("#input_nuevo_doc").val().trim();
+
+    if(!nom.length){
+        $("#alert_nvo_doc").html("El nombre no debe estar vacío.");
+        return;
+    }
+    var car_esp = /\@|\!|\^/gi;
+    if(car_esp.test(nom)){
+        $("#alert_nvo_doc").html("El nombre no debe contener los siguientes caracteres: @, ! y ^");
+        return;
+    }
+    if(dashboard.existe(nom)){
+        $("#alert_nvo_doc").html(`El documento "${nom}" ya existe`);
+        return;
+    }
+    
+    var ndoc = new Documento(nom);
+    dashboard.agregar_documento(ndoc);
+    $("#fila_nuevo_doc").hide();
+    var fila = `
+    <tr>
+        <td scope="row">${nom}</td>
+        <td>
+            <button class="btn"><i class="fa fa-upload"></i></button>
+        </td>
+        <td>
+            <button class="btn"><i class="fa fa-edit"></i></button>
+            <button class="btn"><i class="fa fa-minus"></i></button>
+        </td>
+    </tr>`;
+    $("#listado").find("tbody").first().append(fila);
+
+    //ndoc.setNombre(nom);
+    /*
+    var nom = "rfch ola";
+    var car_esp_letra = /^\d$|^\w\s*+$/;
+    var especiales = ['@','!','^'];
+    var numero = 10;
+    var texto = "23este es el2 _ABC_dario _a234bc_iencia ";
+    let l_er_usuario = [];
+    l_er_usuario[0] = /[0-9]/gi; //digitos
+    l_er_usuario[1] = /\d/gi; //digitos
+    l_er_usuario[2] = /\w/gi; //letras
+    l_er_usuario[3] = /(\w+)/gi; //palabras
+    l_er_usuario[4] = /^\d/gi; //inicia con numero
+    l_er_usuario[5] = /^(\d+)/gi; //inicia con numero completo
+    l_er_usuario[6] = /.\d./gi; //un número en medio
+    l_er_usuario[7] = /.\d$/gi; //un número al final
+    l_er_usuario[8] = /\w\s\w/gi; //un espacio en medio
+    l_er_usuario[9] = /(\w+)\s(\w+)/gi; //palabras con espacio
+
+    er_usuario = l_er_usuario[3];
+
+    console.log("______________________________");
+    console.log("REGEXP",er_usuario);
+    console.log("ENTRADA", nom);
+    console.log("test", er_usuario.test(nom));
+    console.log("match", nom.match(er_usuario));
+    console.log("search", nom.search(er_usuario));
+    console.log("replace", nom.replace(er_usuario,"*"));
+    console.log("replace con agrupador", usu.replace(er_usuario,' _$1_ '));
+    //console.log("replace", usu.replace(er_usuario,'$2 - $1'));
+    console.log("split", usu.split(er_usuario)); "hola-mundo-javascript".split(/\s/)*/
+
+    
+});
 
 ingreso.addEventListener("click", function(e){
     console.log(event);
@@ -264,6 +339,4 @@ $("#recuperar").click(function(){
     }
 }) */
 
-var dashboard = new Dashboard();
 
-console.log(dashboard);

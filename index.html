@@ -2,6 +2,9 @@
 <html>
     <head>
         <title>Digitalapp</title>
+        <!--<link href="javascript/plugins/bootstrap-4.4.1/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="javascript/plugins/fontawesome-free-5.12.1-web/css/all.css">
     </head>
 
     <body>
@@ -13,7 +16,7 @@
             <input type="password" placeholder="contraseña" id="pass">
             <button id="ingreso">Ingresar</button>
             <hr>
-            <button id="abrir_registro">Registrar</button>
+            <button class="btn btn-success" type="button" id="abrir_registro">Registrar</button>
             <button id="abrir_recuperar">Recuperar contraseña</button>
         </div>
         <div id="app" style="display: none">
@@ -21,18 +24,26 @@
                 <h1>Digitalapp</h1>
             <button id="logout">Salir</button>
             </div>
-            <button>Nuevo documento</button>
-            <table id="listado">
+            <button id="btn_crear">Nuevo documento</button>
+            <table id="listado" class="table">
                 <thead>
-                    <th>Documento</th>
-                    <th>Archivos</th>
-                    <th>Opciones</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Archivos</th>
+                    <th scope="col">Opciones</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>RFC</td>
-                        <td>rfc_2020.pdf</td>
-                        <td>+ - ---</td>
+                    <tr id="fila_nuevo_doc" style="display: none;">
+                        <td scope="row">
+                            <input id="input_nuevo_doc" class="form-control" type="text" placeholder="Teclee el nombre del nuevo documento">
+                        </td>
+                        <td>
+                            <div id="alert_nvo_doc" class="alert alert-danger" role="alert">
+                                A simple danger alert—check it out!
+                            </div>
+                        </td>
+                        <td>
+                            <button id="btn_nuevo_doc_crear" class="btn"><i class="fa fa-check"></i></button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -70,6 +81,8 @@
     </body>
 </html>
 <script src="javascript/plugins/jquery-3.4.1.js"></script>
+<script src="javascript/plugins/bootstrap-4.4.1/js/bootstrap.js"></script>
+
 <script src="javascript/prototipos/archivo.js"></script>
 <script src="javascript/prototipos/documento.js"></script>
 <script src="javascript/prototipos/dashboard.js"></script>
