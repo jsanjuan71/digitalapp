@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Digitalapp</title>
+    </head>
+
+    <body>
+        <div id="login">
+            <p>
+                <label>Bienvenido al sistema Digitalapp</label>
+            </p>
+            <input type="text" placeholder="usuario" id="usr">
+            <input type="password" placeholder="contraseña" id="pass">
+            <button id="ingreso">Ingresar</button>
+            <hr>
+            <button id="abrir_registro">Registrar</button>
+            <button id="abrir_recuperar">Recuperar contraseña</button>
+        </div>
+        <div id="app" style="display: none">
+            <div style="display: flex;">
+                <h1>Digitalapp</h1>
+            <button id="logout">Salir</button>
+            </div>
+            <button>Nuevo documento</button>
+            <table id="listado">
+                <thead>
+                    <th>Documento</th>
+                    <th>Archivos</th>
+                    <th>Opciones</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>RFC</td>
+                        <td>rfc_2020.pdf</td>
+                        <td>+ - ---</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="registro" style="display: none">
+            <h1>Registro de usuario</h1>
+            <input type="text" placeholder="Nombre">
+            <input type="text" placeholder="Usuario">
+            <input type="password" placeholder="clave">
+            <input type="password" placeholder="Confirmar clave">
+            <br>
+            <p>Pregunta de seguridad</p>
+            <select>
+                <option value="¿Mascota favorita?">Mascota favorita</option>
+                <option value="¿Numero de la suerte?">Numero de la suerte</option>
+                <option value="¿Cancion favorita?">Cancion favorita</option>
+            </select>
+            <input type="text" placeholder="respuesta">
+            <br>
+            <button id="registrar">Registrar</button>
+        </div>
+
+        <div id="recuperacion" style="display: none">
+            <h1>Recuperar contraseña</h1>
+            <input type="text" placeholder="usuario" id="usu_rec">
+
+            <label>Pregunta</label>
+            <input type="text" placeholder="respuesta" disabled>
+            <br>
+            <input type="password" placeholder="NUEVA CONTRASEÑA" style="display: none;">
+            <input type="password" style="display: none;">
+            <button id="recuperar" data-accion="pregunta" data-otro="2" data-mas="hdbehd">Recuperar</button>
+        </div>
+    </body>
+</html>
+<script src="javascript/plugins/jquery-3.4.1.js"></script>
+<script src="javascript/prototipos/archivo.js"></script>
+<script src="javascript/prototipos/documento.js"></script>
+<script src="javascript/prototipos/dashboard.js"></script>
+<script src="digitalapp.js"></script>
+
+
+<!--    jsviews -> uso de plantillas -->
+
+
