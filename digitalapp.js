@@ -1,5 +1,22 @@
+function renderizar(nom_plantilla, datos, callback){
+    $.get("./views/"+nom_plantilla+".html", (html)=>{
+        var renderizado = $.templates(html).render(datos);
+        callback( renderizado );
+    });
+}
+
 var dashboard = new Dashboard();
+
+for(var doc of ["RFC","INE","ACTA NACIMIENTO"]){
+    dashboard.agregar_documento( new Documento(doc) )
+}
+
+dashboard.mostrar_lista();
+
 console.log(dashboard);
+
+console.log($.views);
+console.log($.templates);
 
 var usuarios = [
     {
@@ -36,68 +53,111 @@ $("#btn_crear").click(function(){
     $("#fila_nuevo_doc").show();
 });
 
+function validar_nombre(nom){
+    if(!nom.length){
+        $("#alert_nvo_doc").html("El nombre no debe estar vacío.");
+        return false;
+    }
+    var car_esp = /\@|\!|\^/gi;
+    if(car_esp.test(nom)){
+        $("#alert_nvo_doc").html("El nombre no debe contener los siguientes caracteres: @, ! y ^");
+        return false;
+    }
+    if(dashboard.existe(nom)){
+        $("#alert_nvo_doc").html(`El documento "${nom}" ya existe`);
+        return false;
+    }
+    return true;
+}
+
 $("#btn_nuevo_doc_crear").click(function(){
     // agregar un documenton nuevo
     
     var nom = $("#input_nuevo_doc").val().trim();
 
-    if(!nom.length){
-        $("#alert_nvo_doc").html("El nombre no debe estar vacío.");
-        return;
-    }
-    var car_esp = /\@|\!|\^/gi;
-    if(car_esp.test(nom)){
-        $("#alert_nvo_doc").html("El nombre no debe contener los siguientes caracteres: @, ! y ^");
-        return;
-    }
-    if(dashboard.existe(nom)){
-        $("#alert_nvo_doc").html(`El documento "${nom}" ya existe`);
-        return;
-    }
+    if(validar_nombre(nom)==false) return;
     
     var ndoc = new Documento(nom);
     dashboard.agregar_documento(ndoc);
     $("#fila_nuevo_doc").hide();
-    var fila_html = `
+    $.get("./vistas/fila_documento.html", function(contenido){
+        var fila_html = contenido;
+        var plantilla= $.templates(fila_html);
+        plantilla.render(ndoc)
+        var fila = $(fila_html);
+        var btn_edit = fila.find(".edit").first();
+        var btn_upload = fila.find(".upload").first();
+        var btn_delete = fila.find(".delete").first();
+        var input_file= $(fila).find("input[type='file']");
+
+        $(input_file).change(function(evt){
+            console.log(evt.target.files);
+        });
+        $(btn_upload).click(function(e){
+            
+            input_file.click();
+        });
+
+        $(btn_delete).click(function(){
+            $("#dialogo_eliminar").modal("show");
+            $("#dialogo_eliminar").find("button[data-accion='eliminar']").click(function(){
+                $("#dialogo_eliminar").modal("hide");
+                $(fila).remove();
+                dashboard.eliminar_documento(ndoc);
+            });
+        });
+
+        $(btn_edit).click(function(){
+            $(fila).hide();
+            $.get("./views/fila_editar.html", (fila_editar)=>{
+                var fila_edit = $.templates(fila_editar).render(ndoc);
+                $(fila).after(fila_edit);
+                var btn_guar_edit = fila_edit.find(".guardar_edit").first();
+                var nvo_nom_input = fila_edit.find(".nvo_nom_input").first();
+                $(btn_guar_edit).click(function(){
+                    var nvo_nom = nvo_nom_input.val().trim();
+                    if(validar_nombre(nvo_nom)==false){
+                        alert("El nombre no es valido");
+                        nvo_nom_input.focus();
+                    } else{
+                        $(fila).find("[data-campo='nombre']").first().html(nvo_nom);
+                        ndoc.setNombre( nvo_nom );
+                        $(fila_edit).remove();
+                        $(fila).show();
+                    }
+                });
+            });
+            /*var fila_editar_html = `
+                <tr>
+                    <td scope="row"> <input class="nvo_nom_input" type="text" value="${nom}"> </td>
+                    <td>
+                    </td>
+                    <td>
+                        <button class="btn guardar_edit"><i class="fa fa-check"></i></button>
+                    </td>
+                </tr>`;
+
+            var fila_edit = $(fila_editar_html);
+            $(fila).after(fila_edit);*/
+            
+        });
+
+        $("#listado").find("tbody").first().append(fila);
+    });
+    /*var fila_html = `
     <tr>
-        <td scope="row">${nom}</td>
+        <td scope="row" data-campo="nombre">${nom}</td>
         <td>
-            <button class="btn upload"><i class="fa fa-upload"></i></button>
+            <input type="file" multiple style="display:none">
+            <button class="btn upload" data-campo="upload"><i class="fa fa-upload"></i></button>
         </td>
         <td>
             <button class="btn edit"><i class="fa fa-edit"></i></button>
             <button class="btn delete"><i class="fa fa-minus"></i></button>
         </td>
-    </tr>`;
+    </tr>`;*/
 
-    var fila = $(fila_html);
-    var btn_edit = fila.find(".edit").first();
-    var btn_upload = fila.find(".upload").first();
-    var btn_delete = fila.find(".delete").first();
-
-    $(btn_edit).click(function(){
-        $(fila).hide();
-        var fila_editar_html = `
-            <tr>
-                <td scope="row"> <input type="text" value="${nom}"> </td>
-                <td>
-                </td>
-                <td>
-                    <button class="btn guardar_edit"><i class="fa fa-check"></i></button>
-                </td>
-            </tr>`;
-        var fila_edit = $(fila_editar_html);
-        $(fila).after(fila_edit);
-        var btn_guar_edit = fila_edit.find(".guardar_edit").first();
-        $(btn_guar_edit).click(function(){
-            $(fila_edit).remove();
-            $(fila).show();
-            //Editar campo nombre de la fila
-            //Editar atributo nombre del objeto de documento
-        });
-    });
-
-    $("#listado").find("tbody").first().append(fila);
+    
 
 
     //ndoc.setNombre(nom);
@@ -134,7 +194,8 @@ $("#btn_nuevo_doc_crear").click(function(){
 
     
 });
-
+div_login.style.display = "none";
+                div_app.style.display = "block";
 ingreso.addEventListener("click", function(e){
     console.log(event);
     console.log(usr.value);
@@ -305,6 +366,8 @@ console.log(res); */
  */
 
 
+
+
 $("#recuperar").click(function(){
     var accion = $(this).data("accion");
     console.log("accion", accion);
@@ -315,12 +378,10 @@ $("#recuperar").click(function(){
         for(var usuario of usuarios){
             if(usuario.usuario == usu){
                 if(usuario.secret.respuesta == resp){
-                    //$("#recuperacion").find("input[type='password']");
                     console.log( $("#recuperacion") );
                     console.log( $("#recuperacion").find("input[type='password']")  );
                     var input = $("#recuperacion").find("input[type='password']").first();
                     input.show().css("color", "red");
-                    //$(this).attr("data-accion","guardar");
                     $(this).data("accion", "guardar");
                     $(this).html("Guardar");
                    

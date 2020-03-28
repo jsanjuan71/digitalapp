@@ -22,6 +22,7 @@
         <div id="app" style="display: none">
             <div style="display: flex;">
                 <h1>Digitalapp</h1>
+            {{if}}
             <button id="logout">Salir</button>
             </div>
             <button id="btn_crear">Nuevo documento</button>
@@ -32,19 +33,6 @@
                     <th scope="col">Opciones</th>
                 </thead>
                 <tbody>
-                    <tr id="fila_nuevo_doc" style="display: none;">
-                        <td scope="row">
-                            <input id="input_nuevo_doc" class="form-control" type="text" placeholder="Teclee el nombre del nuevo documento">
-                        </td>
-                        <td>
-                            <div id="alert_nvo_doc" class="alert alert-danger" role="alert">
-                                A simple danger alert—check it out!
-                            </div>
-                        </td>
-                        <td>
-                            <button id="btn_nuevo_doc_crear" class="btn"><i class="fa fa-check"></i></button>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -78,10 +66,32 @@
             <input type="password" style="display: none;">
             <button id="recuperar" data-accion="pregunta" data-otro="2" data-mas="hdbehd">Recuperar</button>
         </div>
+
+
+        <div class="modal fade" id="dialogo_eliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalCenterTitle">Eliminar documento</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  ¿Seguro que desea eliminar el documento?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button data-accion="eliminar" type="button" class="btn btn-primary">Si</button>
+                </div>
+              </div>
+            </div>
+        </div>
     </body>
 </html>
 <script src="javascript/plugins/jquery-3.4.1.js"></script>
 <script src="javascript/plugins/bootstrap-4.4.1/js/bootstrap.js"></script>
+<script src="javascript/plugins/jsrender.js"></script>
 
 <script src="javascript/prototipos/archivo.js"></script>
 <script src="javascript/prototipos/documento.js"></script>
